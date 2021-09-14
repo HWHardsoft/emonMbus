@@ -11,9 +11,11 @@ This example contains code to decode data of a energy meter. You have to change 
 
 ## Credits
 Based on the awesome work of OpenEnergyMonitor code by Trystan Lea, Glyn Hudson, and others
+
 https://github.com/openenergymonitor/HeatpumpMonitor
 
 and Bryan McLellan  <btm@loftninjas.org>
+
 https://github.com/btm/emonMbus
 
 
