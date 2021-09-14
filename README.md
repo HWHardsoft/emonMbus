@@ -6,7 +6,7 @@ This software will read out a M-BUS device connected to an Arduino MKR board equ
 
 
 ## Data decoding
-This example contains code to decode data of a SML meter. You have to change this section regarding your connected device it is recommed to use the software [M-BUS repeater](https://github.com/HWHardsoft/Arduino-MBUS-repeater/), to analyse the received data more in detail. 
+This example contains code to decode data of a energy meter. You have to change this section regarding your connected device. It is recommed to use the software [M-BUS repeater](https://github.com/HWHardsoft/Arduino-MBUS-repeater/), to analyse the received data more in detail. 
 
 
 ## Credits
