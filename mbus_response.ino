@@ -80,24 +80,14 @@ bool mbus_get_response(byte *pdata, unsigned char len_pdata) {
   }
 
   if (complete_frame && !frame_error) {
+    // good frame
     return MBUS_GOOD_FRAME;
   } else {
+    // bad frame
     return MBUS_BAD_FRAME;
   }
 }
 
-// Spire 280T-S returns decimal values as hex, right to left for multi-byte values
-// start_byte is first data byte / most significant data byte
-long get_spire_value(byte *pdata, unsigned int start_byte, unsigned char num_bytes) {
-  String val;
-  for (int i = start_byte - 1 + num_bytes; i >= start_byte; i--) {
-    // Serial.println(String(pdata[i], HEX));
-    char hex[4];
-    sprintf(hex, "%.2X", pdata[i]); // ensure leading zeros are included
-    val = val + hex;
-  }
-  return val.toInt();
-}
 
 // Prints a whole response as a string for debugging
 void print_bytes(byte *bytes, unsigned char len_bytes) {

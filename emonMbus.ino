@@ -1,57 +1,48 @@
 /*
- * MBUS master for Arduino MKR MBUS Shield 
+ * MBUS master for Arduino MBUS Master Shield 
  * https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/
  * 
- * Version 1.0
- * Copyright (C) 2021  Hartmut Wendt  www.zihatec.de
+ * Version 2.0
+ * Copyright (C) 2023  Hartmut Wendt  www.zihatec.de
  * 
+ * 
+ * External library "MBusinoLib" needed: https://github.com/Zeppelin500/MBusinoLib
  * 
  * Based on OpenEnergyMonitor code by Trystan Lea, Glyn Hudson, and others
  * https://github.com/openenergymonitor/HeatpumpMonitor
- * 
- * and Bryan McLellan  <btm@loftninjas.org>
- * https://github.com/btm/emonMbus
+ * Copyright 2018, Bryan McLellan <btm@loftninjas.org>
  * 
  * License: GPLv3 https://www.gnu.org/licenses/gpl.txt
  */
 
 #define DEBUG true
 
+#include "MBusinoLib.h"
+#include "ArduinoJson.h"
+
 
 // Serial interface used for mbus to allow use of 8E1 encoding
-// MKR Shield is using UART Serial1
 #include <HardwareSerial.h>
 HardwareSerial *customSerial;
 
 
-#define MBUS_BAUD_RATE 2400
-#define MBUS_ADDRESS 2
-#define MBUS_TIMEOUT 1000 // milliseconds
+#define MBUS_BAUD_RATE 2400   // slave baudrate
+#define MBUS_ADDRESS 2        // slave address
+#define MBUS_TIMEOUT 1000     // milliseconds
 #define MBUS_DATA_SIZE 255
 #define MBUS_GOOD_FRAME true
 #define MBUS_BAD_FRAME false
 
+
 unsigned long loop_start = 0;
 unsigned long last_loop = 0;
 bool firstrun = true;
-int Startadd = 17;
+int Startadd = 0x13;      // Start address for decoding
 
-/* emonhub.conf configuration
-  [[12]]
-    nodename = emonmbus
-    [[[rx]]]
-       names = energy, flow, power, flowrate, supplyT, returnT
-       scales = 1,1,1,1,0.01,0.01
-       units = kW,kW,m,mm,C,C
- */
-typedef struct {
-  int energy, flow, power, flowrate, supplyT, returnT ;
-} PayloadTX;
-
-PayloadTX emon_data_tx;
 
 void setup() {
   Serial.begin(115200);
+  delay(1500);
   Serial.println(F("emonMbus startup"));
   Serial.println(F("mbus:"));
   Serial.print(F("  slave address: "));
@@ -86,23 +77,38 @@ void loop() {
       if (DEBUG) Serial.println(F("mbus: good frame: "));
       if (DEBUG) print_bytes(mbus_data, sizeof(mbus_data));
 
+      int packet_size = mbus_data[1] + 6; 
+      Serial.println(F("Creating payload buffer..."));
+      MBusinoLib payload(MBUS_DATA_SIZE);
+      Serial.print(F("Packet size: ")); Serial.println(packet_size);
 
-      // change this section for your M-Bus device:
-      //
-      // SMTenergy 6h 27b, SMTflowrate 3Bh 44b, SMTflowT 59h 49b, SMTreturnT 5Dh 53b, SMTflow 14h 33b, SMTheat 2Ch 39b   
-      emon_data_tx.energy = get_spire_value(mbus_data, 27, 4);
-      emon_data_tx.flow = get_spire_value(mbus_data, 33, 4);
-      emon_data_tx.power = get_spire_value(mbus_data, 39, 3);
-      emon_data_tx.flowrate = get_spire_value(mbus_data, 44, 3);
-      emon_data_tx.supplyT = get_spire_value(mbus_data, 49, 2);
-      emon_data_tx.returnT = get_spire_value(mbus_data, 53, 2);
-      Serial.print(F("SMTenergy kWh: ")); Serial.println(emon_data_tx.energy);
-      Serial.print(F("SMTflow: ")); Serial.println(emon_data_tx.flow);
-      Serial.print(F("SMTpower: ")); Serial.println(emon_data_tx.power);
-      Serial.print(F("SMTflowrate: ")); Serial.println(emon_data_tx.flowrate);
-      Serial.print(F("SMTsupplyT: ")); Serial.println(emon_data_tx.supplyT);
-      Serial.print(F("SMTreturnT: ")); Serial.println(emon_data_tx.returnT);
-    
+      Serial.print(F("Start Address: ")); Serial.println(Startadd);
+      
+      Serial.println(F("Decoding..."));
+      DynamicJsonDocument jsonBuffer(2048);
+      JsonArray root = jsonBuffer.createNestedArray();  
+      uint8_t fields = payload.decode(&mbus_data[Startadd], packet_size - Startadd - 2, root); 
+      serializeJsonPretty(root, Serial);
+
+      Serial.println();
+      Serial.print("Detected data fields: ");
+      Serial.println(fields);
+      
+      Serial.print("Detected error: "); 
+      Serial.println(payload.getError());
+
+      Serial.println();
+      for (uint8_t i=0; i<fields; i++) {
+          float value = root[i]["value_scaled"].as<float>();
+          uint8_t code = root[i]["code"].as<int>();
+          Serial.print("Field "); Serial.print(i+1); 
+          Serial.print(" ("); Serial.print((char *) payload.getCodeName(code)); 
+          Serial.print("): ");
+          Serial.print(value); Serial.print(" "); Serial.print((char *) payload.getCodeUnits(code));
+          Serial.println();
+      }
+
+      Serial.println();
     } else {
       Serial.print(F("mbus: bad frame: "));
       print_bytes(mbus_data, sizeof(mbus_data));
