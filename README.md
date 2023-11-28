@@ -1,22 +1,23 @@
 # Arduino M-BUS Master node for Arduino MKR M-BUS Shield
 
-This software will read out a M-BUS device connected to an Arduino MKR board equipped with our [Arduino MKR M-BUS shield](https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/).
+This software will read out a M-BUS slave device connected to an Arduino MKR board equipped with our [Arduino MKR M-BUS Master shield](https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/).
 
 ![My image](https://user-images.githubusercontent.com/3049858/72681999-3a597480-3ac9-11ea-857b-fae4e47f3a2b.jpg)
 
 
 ## Data decoding
-This example contains code to decode data of an energy meter. You have to change this section regarding your connected device. It is recommed to use the software [M-BUS repeater](https://github.com/HWHardsoft/Arduino-MBUS-repeater/), to analyse the received data more in detail first.
+The decoded data is output in JSON format via the UART0 (USB port) and can be viewed via the serial monitor of the Arduino IDE.
+Make sure to adjust the primary MBUS address of the slave and the baud rate of the slave in the program.
 
 
 ## Credits
-Based on the awesome work of OpenEnergyMonitor code by Trystan Lea, Glyn Hudson, and others
+[MbusduinoLib](https://github.com/Zeppelin500/MBusino) by Zeppelin500 
 
-https://github.com/openenergymonitor/HeatpumpMonitor
 
-and Bryan McLellan  <btm@loftninjas.org>
+Based on the awesome work of [Open energy monitor](https://github.com/openenergymonitor/HeatpumpMonitor) code by Trystan Lea, Glyn Hudson, and others
 
-https://github.com/btm/emonMbus
+[emonMbus](https://github.com/btm/emonMbus) by Bryan McLellan  <btm@loftninjas.org>
+
 
 
 ## License
