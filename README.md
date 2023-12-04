@@ -9,9 +9,10 @@ This software will read out a M-BUS slave device connected to an Arduino MKR boa
 The decoded data is output in JSON format via the UART0 (USB port) and can be viewed via the serial monitor of the Arduino IDE.
 Make sure to adjust the primary MBUS address of the slave and the baud rate of the slave in the program.
 
+![Monitor_output](https://github.com/HWHardsoft/emonMbus/assets/3049858/6ef558bd-514f-41fe-a4d4-2f18750ba42e)
 
 ## Credits
-[MbusduinoLib](https://github.com/Zeppelin500/MBusino) by Zeppelin500 
+[MbusinoLib](https://github.com/Zeppelin500/MBusino) by Zeppelin500 
 
 
 Based on the awesome work of [Open energy monitor](https://github.com/openenergymonitor/HeatpumpMonitor) code by Trystan Lea, Glyn Hudson, and others
