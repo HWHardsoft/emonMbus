@@ -2,7 +2,7 @@
  * MBUS master for Arduino MBUS Master Shield 
  * https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/
  * 
- * Version 2.0
+ * Version 2.1
  * Copyright (C) 2023  Hartmut Wendt  www.zihatec.de
  * 
  * 
@@ -101,8 +101,10 @@ void loop() {
       for (uint8_t i=0; i<fields; i++) {
           float value = root[i]["value_scaled"].as<float>();
           uint8_t code = root[i]["code"].as<int>();
+          const char* name = root[i]["name"];
           Serial.print("Field "); Serial.print(i+1); 
-          Serial.print(" ("); Serial.print((char *) payload.getCodeName(code)); 
+          //Serial.print(" ("); Serial.print((char *) payload.getCodeName(code)); 
+          Serial.print(" ("); Serial.print(name); 
           Serial.print("): ");
           Serial.print(value); Serial.print(" "); Serial.print((char *) payload.getCodeUnits(code));
           Serial.println();
