@@ -2,7 +2,7 @@
  * MBUS master for Arduino MBUS Master Shield 
  * https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/
  * 
- * Version 2.1
+ * Version 2.2
  * Copyright (C) 2023  Hartmut Wendt  www.zihatec.de
  * 
  * 
@@ -32,6 +32,7 @@ HardwareSerial *customSerial;
 #define MBUS_DATA_SIZE 255
 #define MBUS_GOOD_FRAME true
 #define MBUS_BAD_FRAME false
+#define JSON_DATA_SIZE 2000
 
 
 unsigned long loop_start = 0;
@@ -68,7 +69,11 @@ void loop() {
      *************/
     bool mbus_good_frame = false;
     byte mbus_data[MBUS_DATA_SIZE] = { 0 };
-
+    
+    mbus_normalize(0xFD);
+    delay(500);
+    mbus_normalize(0xFD);
+    delay(200);
     if (DEBUG) Serial.print(F("mbus: requesting data from address: "));
     if (DEBUG) Serial.println(MBUS_ADDRESS);
     mbus_request_data(MBUS_ADDRESS);
@@ -79,7 +84,7 @@ void loop() {
 
       int packet_size = mbus_data[1] + 6; 
       Serial.println(F("Creating payload buffer..."));
-      MBusinoLib payload(MBUS_DATA_SIZE);
+      MBusinoLib payload(JSON_DATA_SIZE);
       Serial.print(F("Packet size: ")); Serial.println(packet_size);
 
       Serial.print(F("Start Address: ")); Serial.println(Startadd);
