@@ -1,9 +1,14 @@
-# Arduino M-BUS Master node for Arduino MKR M-BUS Shield
+# Hardware
 
-This software will read out a M-BUS slave device connected to an Arduino MKR board equipped with our [Arduino MKR M-BUS Master shield](https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/).
+This software will read out a M-BUS slave device connected to an M-BUS master shield. We offer 3 different boards:
+
+[Arduino MKR M-BUS Master shield](https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/).
 
 ![My image](https://github.com/HWHardsoft/emonMbus/assets/3049858/ced0fc9a-9ee6-4e34-9a0c-d57d86f6fc5c)
 
+[Raspberry Pi Pico MBUS Master HAT](https://www.hwhardsoft.de/english/projects/m-bus-pico-hat/).
+
+[MBUS Master Featherwing](https://www.hwhardsoft.de/english/projects/m-bus-featherwing/).
 
 ## Data decoding
 The decoded data is output in JSON format via the UART0 (USB port) and can be viewed via the serial monitor of the Arduino IDE.
