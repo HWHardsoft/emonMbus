@@ -4,15 +4,15 @@ This software will read out a M-BUS slave device connected to an M-BUS master sh
 
 [Arduino MKR M-BUS Master shield](https://www.hwhardsoft.de/english/projects/m-bus-mkr-shield/).
 
-![My image](https://github.com/HWHardsoft/emonMbus/assets/3049858/ced0fc9a-9ee6-4e34-9a0c-d57d86f6fc5c)
+![Arduino MKR](https://github.com/HWHardsoft/emonMbus/assets/3049858/ced0fc9a-9ee6-4e34-9a0c-d57d86f6fc5c)
 
 [Raspberry Pi Pico MBUS Master HAT](https://www.hwhardsoft.de/english/projects/m-bus-pico-hat/).
 
-![My image](https://github.com/HWHardsoft/emonMbus/assets/3049858/cb2aedd3-f80b-4ab8-a6e9-ebf52ce90ce4)
+![Raspberry Pi Pico](https://github.com/HWHardsoft/emonMbus/assets/3049858/cb2aedd3-f80b-4ab8-a6e9-ebf52ce90ce4)
 
 [MBUS Master Featherwing](https://www.hwhardsoft.de/english/projects/m-bus-featherwing/).
 
-![My image](https://github.com/HWHardsoft/emonMbus/assets/3049858/0d119007-65ce-4994-8516-32c01b7f4562)
+![Featherwing](https://github.com/HWHardsoft/emonMbus/assets/3049858/0d119007-65ce-4994-8516-32c01b7f4562)
 
 ## Data decoding
 The decoded data is output in JSON format via the UART0 (USB port) and can be viewed via the serial monitor of the Arduino IDE.
